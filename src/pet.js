@@ -24,4 +24,14 @@ Pet.prototype.walk = function() {
     this.fitness = newFitness > MAXIMUM_FITNESS ? MAXIMUM_FITNESS : newFitness;
 };
 
+Pet.prototype.checkUp = function() {
+    const checkHunger = this.hunger >= 5;
+    const checkFitness = this.fitness <= 3;
+
+    if (checkHunger && checkFitness) return 'I am hungry AND I need a walk'
+    if (checkHunger) return 'I am hungry';
+    if (checkFitness) return 'I need a walk';
+    return 'I feel great!'
+}
+
 module.exports = Pet
