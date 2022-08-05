@@ -29,9 +29,22 @@ describe('constructor', () => {
 
     it('increases hunger by 5 when growUp is called', () => {
         const pet = new Pet('Fido');
-        expect(pet.hunger).toBe(0);
         pet.growUp();
         expect(pet.hunger).toBe(5);
+    });
+
+    it('decreases hunger level by 3 when feed is called', () => {
+        const pet = new Pet('Fido');
+        pet.hunger = 4;
+        pet.feed();
+        expect(pet.hunger).toBe(1);
+    });
+
+    it('hunger level never goes below 0', () => {
+        const pet = new Pet('Fido');
+        pet.hunger = 2;
+        pet.feed();
+        expect(pet.hunger).toBe(0);
     });
 
     it('sets initial fitness propety to 10', () => {
