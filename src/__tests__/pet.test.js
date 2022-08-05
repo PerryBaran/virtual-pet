@@ -1,63 +1,111 @@
-const Pet = require('../pet');
+const petFactory = require('../pet');
 
 describe('constructor', () => {
     it('returns and object', () => {
-        expect(new Pet('Fido')).toBeInstanceOf(Object);
+        expect(petFactory('Fido')).toBeInstanceOf(Object);
+    });
+
+    it('cannot change pet name', () => {
+        const pet = petFactory('Fido');
+        pet.name = 'Pete'
+        expect(pet.name).not.toBe('Pete');
+        expect(pet.name).toBe('Fido');
     });
 
     it('sets name property', () => {
-        const pet = new Pet('Fido');
+        const pet = petFactory('Fido');
         expect(pet.name).toBe('Fido');
+    });
+    
+    it('creates seperate instances of objects', () => {
+        const fido = petFactory('Fido');
+        const pete = petFactory('Pete');
+        expect(fido.name).toBe('Fido');
+        expect(pete.name).toBe('Pete');
+    });
+
+    describe('isAlive', () => {
+        it('returns true if fitness > 0, hunger < 10 and age < 30', () => {
+            const pet = petFactory('Fido');
+            expect(pet.isAlive).toBeTruthy();
+        });
+
+        it('returns false if fitness <= 0', () => {
+            const pet = petFactory('Fido');
+            pet.fitness = 0;
+            expect(pet.hunger).toBeGreaterThanOrEqual(0);
+            expect(pet.age).toBeLessThan(30);
+            expect(pet.fitness).toBeLessThanOrEqual(0);
+            expect(pet.isAlive).toBeFalsy();
+        });
+
+        it('returns false if hunger >= 10', () => {
+            const pet = petFactory('Fido');
+            pet.hunger = 10;
+            expect(pet.hunger).toBeGreaterThanOrEqual(10);
+            expect(pet.age).toBeLessThan(30);
+            expect(pet.fitness).toBeGreaterThan(0);
+            expect(pet.isAlive).toBeFalsy();
+        });
+
+        it('returns false if age >= 30', () => {
+            const pet = petFactory('Fido');
+            pet.age = 30;
+            expect(pet.hunger).toBeLessThan(10);
+            expect(pet.age).toBeGreaterThanOrEqual(30);
+            expect(pet.fitness).toBeGreaterThan(0);
+            expect(pet.isAlive).toBeFalsy();
+        });
     });
 
     describe('age', () => {
         it('sets initial value to 0', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             expect(pet.age).toBe(0);
         });
 
         it('increases by 1 when growUp is called', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             expect(pet.age).toBe(0);
             pet.growUp();
             expect(pet.age).toBe(1);
         });
 
         it('cannot call growUp when isAlive is false', () => {
-            const pet = new Pet('Fido');
-            pet.age = 30;
+            const pet = petFactory('Fido');
+            pet.age = 35;
+            expect(pet.isAlive).toBeFalsy();
             expect(() => pet.growUp()).toThrow('Your pet is no longer alive :(');
         });
     });
 
     describe('hunger', () => {
         it('sets initial value to 0', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             expect(pet.hunger).toBe(0);
         });
 
         it('increases by 5 when growUp is called', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             pet.growUp();
             expect(pet.hunger).toBe(5);
         });
 
         it('decreases by 3 when feed is called', () => {
-            const pet = new Pet('Fido');
-            pet.hunger = 4;
+            const pet = petFactory('Fido');
+            pet.hunger = 5;
             pet.feed();
-            expect(pet.hunger).toBe(1);
+            expect(pet.hunger).toBe(2);
         });
 
         it('never goes below 0', () => {
-            const pet = new Pet('Fido');
-            pet.hunger = 2;
+            const pet = petFactory('Fido');
             pet.feed();
             expect(pet.hunger).toBe(0);
         });  
         
         it('cannot call feed when isAlive is false', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             pet.hunger = 10;
             expect(() => pet.feed()).toThrow('Your pet is no longer alive :(');
         });
@@ -65,33 +113,31 @@ describe('constructor', () => {
 
     describe('fitness', () => {
         it('sets initial value to 10', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             expect(pet.fitness).toBe(10);
         });
 
         it('decreases 3 when growUp is called', () => {
-            const pet = new Pet('Fido');
-            expect(pet.fitness).toBe(10);
+            const pet = petFactory('Fido');
             pet.growUp();
             expect(pet.fitness).toBe(7);
         });
 
         it('increases by 4 when walk is called', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             pet.fitness = 4;
             pet.walk();
             expect(pet.fitness).toBe(8);
         });
 
         it('does not increase fitness past 10', () => {
-            const pet = new Pet('Fido');
-            pet.fitness = 7;
+            const pet = petFactory('Fido');
             pet.walk();
             expect(pet.fitness).toBe(10);
         });
 
         it('cannot call walk when isAlive is false', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             pet.fitness = 0;
             expect(() => pet.walk()).toThrow('Your pet is no longer alive :(');
         });
@@ -99,81 +145,55 @@ describe('constructor', () => {
 
     describe('checkUp', () => {
         it('returns "I feel great!" when fitness > 3 and hunger < 5', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             expect(pet.checkUp()).toEqual('I feel great!')
         });
 
         it('returns "I am hungry" when fitness > 3 and hunger >= 5', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             pet.hunger = 5;
-            expect(pet.checkUp()).toEqual('I am hungry');
-            pet.hunger = 7;
+            expect(pet.hunger).toBeGreaterThanOrEqual(5);
+            expect(pet.fitness).toBeGreaterThan(3);
             expect(pet.checkUp()).toEqual('I am hungry');
         });
 
         it('returns "I need a walk" when fitness <= 3 and hunger < 5', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             pet.fitness = 3;
-            expect(pet.checkUp()).toEqual('I need a walk');
-            pet.fitness = 1;
+            expect(pet.hunger).toBeLessThan(5);
+            expect(pet.fitness).toBeLessThanOrEqual(3);
             expect(pet.checkUp()).toEqual('I need a walk');
         });
 
         it('returns "I am hungry AND I need a walk" when fitness <= 3 and hunger >= 5', () => {
-            const pet = new Pet('Fido');
-            pet.hunger = 5;
+            const pet = petFactory('Fido');
             pet.fitness = 3;
-            expect(pet.checkUp()).toEqual('I am hungry AND I need a walk');
-            pet.hunger = 7;
-            pet.fitness = 1;
+            pet.hunger = 5;
+            expect(pet.hunger).toBeGreaterThanOrEqual(5);
+            expect(pet.fitness).toBeLessThanOrEqual(3);            
             expect(pet.checkUp()).toEqual('I am hungry AND I need a walk');
         });
 
         it('returns "Your pet is no longer alive :(" when isAlive is false', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             pet.age = 30;
             expect(pet.checkUp()).toEqual('Your pet is no longer alive :(');
         });        
     });
 
-    describe('isAlive', () => {
-        it('returns true if fitness > 0, hunger < 10 and age < 30', () => {
-            const pet = new Pet('Fido');
-            expect(pet.isAlive).toBeTruthy();
-        });
-
-        it('returns false if fitness <= 0', () => {
-            const pet = new Pet('Fido');
-            pet.fitness = 0;
-            expect(pet.isAlive).toBeFalsy();
-        });
-
-        it('returns false if hunger >= 10', () => {
-            const pet = new Pet('Fido');
-            pet.hunger = 10;
-            expect(pet.isAlive).toBeFalsy();
-        });
-
-        it('returns false if age >= 30', () => {
-            const pet = new Pet('Fido');
-            pet.age = 30;
-            expect(pet.isAlive).toBeFalsy();
-        });
-    });
-
     describe('baby', () => {
         it('initializes children as an array', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             expect(pet.children).toBeInstanceOf(Array);
         });
 
         it('initializes with 0 children', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             expect(pet.children).toHaveLength(0)
         });
 
         it('creates a child when haveBaby is called', () => {
-            const pet = new Pet('Fido');
+            const pet = petFactory('Fido');
             pet.haveBaby('Pete');
             expect(pet.children).toHaveLength(1);
             expect(pet.children[0]).toBeInstanceOf(Object);
@@ -181,8 +201,8 @@ describe('constructor', () => {
         });
 
         it('can adopt a child using adoptChild with the child', () => {
-            const pet = new Pet('Fido');
-            const pet2 = new Pet('Pete');
+            const pet = petFactory('Fido');
+            const pet2 = petFactory('Pete');
             pet.adoptChild(pet2);
             expect(pet.children).toHaveLength(1);
             expect(pet.children[0]).toBeInstanceOf(Object);
