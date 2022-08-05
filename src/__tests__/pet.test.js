@@ -160,4 +160,33 @@ describe('constructor', () => {
             expect(pet.isAlive).toBeFalsy();
         });
     });
+
+    describe('baby', () => {
+        it('initializes children as an array', () => {
+            const pet = new Pet('Fido');
+            expect(pet.children).toBeInstanceOf(Array);
+        });
+
+        it('initializes with 0 children', () => {
+            const pet = new Pet('Fido');
+            expect(pet.children).toHaveLength(0)
+        });
+
+        it('creates a child when haveBaby is called', () => {
+            const pet = new Pet('Fido');
+            pet.haveBaby('Pete');
+            expect(pet.children).toHaveLength(1);
+            expect(pet.children[0]).toBeInstanceOf(Object);
+            expect(pet.children[0].name).toBe('Pete')
+        });
+
+        it('can adopt a child using adoptChild with the child', () => {
+            const pet = new Pet('Fido');
+            const pet2 = new Pet('Pete');
+            pet.adoptChild(pet2);
+            expect(pet.children).toHaveLength(1);
+            expect(pet.children[0]).toBeInstanceOf(Object);
+            expect(pet.children[0].name).toBe('Pete')
+        });
+    });
 })
