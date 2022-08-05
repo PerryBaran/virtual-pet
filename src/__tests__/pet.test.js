@@ -22,8 +22,6 @@ describe('constructor', () => {
             pet.growUp();
             expect(pet.age).toBe(1);
         });
-
-
     });
 
     describe('hunger', () => {
@@ -51,8 +49,6 @@ describe('constructor', () => {
             pet.feed();
             expect(pet.hunger).toBe(0);
         });  
-        
-
     });
 
     describe('fitness', () => {
@@ -114,8 +110,6 @@ describe('constructor', () => {
             pet.fitness = 1;
             expect(pet.checkUp()).toEqual('I am hungry AND I need a walk');
         });
-
-    
     });
 
     describe('baby', () => {
@@ -195,4 +189,4 @@ describe('constructor', () => {
             expect(pet.checkUp()).toEqual('Your pet is no longer alive :(');
         });    
     });
-})
+});
