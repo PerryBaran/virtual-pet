@@ -142,29 +142,6 @@ describe('constructor', () => {
     });    
     
     describe('isAlive', () => {
-        it('returns true if fitness > 0, hunger < 10 and age < 30', () => {
-            const pet = new Pet('Fido');
-            expect(pet.isAlive).toBeTruthy();
-        });
-
-        it('returns false if fitness <= 0', () => {
-            const pet = new Pet('Fido');
-            pet.fitness = 0;
-            expect(pet.isAlive).toBeFalsy();
-        });
-
-        it('returns false if hunger >= 10', () => {
-            const pet = new Pet('Fido');
-            pet.hunger = 10;
-            expect(pet.isAlive).toBeFalsy();
-        });
-
-        it('returns false if age >= 30', () => {
-            const pet = new Pet('Fido');
-            pet.age = 30;
-            expect(pet.isAlive).toBeFalsy();
-        });        
-        
         it('cannot call growUp when isAlive is false', () => {
             const pet = new Pet('Fido');
             pet.age = 30;
