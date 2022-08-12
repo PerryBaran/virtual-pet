@@ -1,4 +1,4 @@
-const petFactory = require('../factory');
+const petFactory = require('../factory')
 
 describe('constructor', () => {
     it('returns and object', () => {

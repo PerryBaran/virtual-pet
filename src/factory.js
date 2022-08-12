@@ -1,42 +1,47 @@
-const MAXIMUM_FITNESS = 10;
-const MINIMUM_HUNGER = 0;
-const deadPetError = 'Your pet is no longer alive :('
+const { MAX_AGE, MIN_HUNGER, MAX_HUNGER, MIN_FITNESS, MAX_FITNESS, DEAD_PET } = require('./magicNumbers');
 
 function petFactory(name) {
     let _age = 0;
-    let _hunger = MINIMUM_HUNGER;
-    let _fitness = MAXIMUM_FITNESS;
+    let _hunger = MIN_HUNGER;
+    let _fitness = MAX_FITNESS;
     const _children = [];
     
-    const isAlive = () => _age < 30 && _hunger < 10 && _fitness > 0;
+    const isAlive = () => {
+        return (
+            _age < MAX_AGE && 
+            _hunger < MAX_HUNGER && 
+            _fitness > MIN_FITNESS            
+    )};
     
     const growUp = () => {
-        if(!isAlive()) throw new Error(deadPetError);
+        if(!isAlive()) throw new Error(DEAD_PET);
         _age += 1;
         _hunger += 5;
         _fitness -= 3;
     };
     
     const feed = () => {
-        if(!isAlive()) throw new Error(deadPetError);
+        if(!isAlive()) throw new Error(DEAD_PET);
         const newHunger = _hunger - 3;
-        _hunger = newHunger < MINIMUM_HUNGER ? MINIMUM_HUNGER : newHunger;
+        _hunger = newHunger < MIN_HUNGER ? MIN_HUNGER : newHunger;
     };
     
     const walk = () => {
-        if(!isAlive()) throw new Error(deadPetError);
+        if(!isAlive()) throw new Error(DEAD_PET);
         const newFitness = _fitness + 4;
-        _fitness = newFitness > MAXIMUM_FITNESS ? MAXIMUM_FITNESS : newFitness;
+        _fitness = newFitness > MAX_FITNESS ? MAX_FITNESS : newFitness;
     };
     
     const checkUp = () => {
         const checkHunger = _hunger >= 5;
         const checkFitness = _fitness <= 3;
-    
-        if (!isAlive()) return deadPetError;
-        if (checkHunger && checkFitness) return 'I am hungry AND I need a walk';
-        if (checkHunger) return 'I am hungry';
-        if (checkFitness) return 'I need a walk';
+        const HUNGRY = 'I am hungry';
+        const UNFIT = 'I need a walk';
+
+        if (!isAlive()) return DEAD_PET;
+        if (checkHunger && checkFitness) return `${HUNGRY} AND ${UNFIT}`;
+        if (checkHunger) return HUNGRY;
+        if (checkFitness) return UNFIT;
         return 'I feel great!';
     };
     

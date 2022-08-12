@@ -1,9 +1,4 @@
-const MAX_AGE = 30;
-const MIN_HUNGER = 0;
-const MAX_HUNGER = 10;
-const MIN_FITNESS = 0;
-const MAX_FITNESS = 10;
-const DEAD_PET = 'Your pet is no longer alive :('
+const { MAX_AGE, MIN_HUNGER, MAX_HUNGER, MIN_FITNESS, MAX_FITNESS, DEAD_PET } = require('./magicNumbers');
 
 function Pet(name) {
     this.name = name;
@@ -44,11 +39,13 @@ Pet.prototype.walk = function() {
 Pet.prototype.checkUp = function() {
     const checkHunger = this.hunger >= 5;
     const checkFitness = this.fitness <= 3;
+    const HUNGRY = 'I am hungry';
+    const UNFIT = 'I need a walk';
 
     if (!this.isAlive) return DEAD_PET;
-    if (checkHunger && checkFitness) return 'I am hungry AND I need a walk';
-    if (checkHunger) return 'I am hungry';
-    if (checkFitness) return 'I need a walk';
+    if (checkHunger && checkFitness) return `${HUNGRY} AND ${UNFIT}`;
+    if (checkHunger) return HUNGRY;
+    if (checkFitness) return UNFIT;
     return 'I feel great!';
 };
 

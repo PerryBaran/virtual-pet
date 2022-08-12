@@ -10,6 +10,13 @@ describe('constructor', () => {
         expect(pet.name).toBe('Fido');
     });
 
+    it('cannot change pet name', () => {
+        const pet = new Pet('Fido');
+        pet.name = 'Pete'
+        expect(pet.name).not.toBe('Pete');
+        expect(pet.name).toBe('Fido');
+    });  
+
     describe('age', () => {
         it('sets initial value to 0', () => {
             const pet = new Pet('Fido');
