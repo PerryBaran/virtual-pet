@@ -6,13 +6,6 @@ const MAX_FITNESS = 10;
 const DEAD_PET = 'Your pet is no longer alive :('
 
 class Pet {
-    #isAlive() {
-        return (
-            this.age < MAX_AGE && 
-            this.hunger < MAX_HUNGER && 
-            this.fitness > MIN_FITNESS
-    )};
-
     constructor(name) {
         this.name = name;
         this.age = 0;
@@ -20,6 +13,13 @@ class Pet {
         this.fitness = MAX_FITNESS;
         this.children = [];        
     };
+
+    #isAlive() {
+        return (
+            this.age < MAX_AGE && 
+            this.hunger < MAX_HUNGER && 
+            this.fitness > MIN_FITNESS
+    )};
 
     growUp() {
         if(!this.#isAlive()) throw new Error(DEAD_PET);
